@@ -116,6 +116,7 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
+        contentMain.downloadButton.buttonState = ButtonState.Clicked
         download()
     }
 

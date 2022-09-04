@@ -23,8 +23,8 @@
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:orientation="vertical"
+        android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/download_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,9 +58,10 @@
         android:layout_height="60dp"
         android:layout_margin="20dp"
         app:buttonColor="#07C2AA"
+        app:circleColor="#F9A825"
+        app:loadingColor="#004349"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:loadingColor="#004349" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
