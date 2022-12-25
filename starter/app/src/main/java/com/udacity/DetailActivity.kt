@@ -1,6 +1,7 @@
 package com.udacity
 
 import android.app.NotificationManager
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -32,6 +33,11 @@ class DetailActivity : AppCompatActivity() {
             val status = intentExtra.getString(DOWNLOAD_STATUS)
             contentDetail.fileNameTextView.text = repoName
             contentDetail.statusValueTextView.text = status
+        }
+
+        contentDetail.okButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
