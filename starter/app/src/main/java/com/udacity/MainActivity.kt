@@ -1,5 +1,6 @@
 package com.udacity
 
+import android.Manifest
 import android.app.DownloadManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -8,12 +9,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -50,8 +54,19 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.status_notification_channel_name)
         )
 
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                contentMain.downloadButton.buttonState = ButtonState.Clicked
+                download()
+            } else {
+                Toast.makeText(this, getString(R.string.message_when_user_deny_write_permission), Toast.LENGTH_LONG).show()
+            }
+        }
+
         contentMain.downloadButton.setOnClickListener {
-            checkSelectedRadioButton()
+            checkSelectedRadioButton(requestPermissionLauncher)
         }
     }
 
@@ -92,7 +107,7 @@ class MainActivity : AppCompatActivity() {
             downloadManager.enqueue(request)// enqueue puts the download request in the queue.
     }
 
-    private fun checkSelectedRadioButton() {
+    private fun checkSelectedRadioButton(requestLauncher: ActivityResultLauncher<String>) {
         when (contentMain.radioGroup.checkedRadioButtonId) {
             R.id.glide_radioButton -> {
                 url = "https://github.com/bumptech/glide"
@@ -116,8 +131,13 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
-        contentMain.downloadButton.buttonState = ButtonState.Clicked
-        download()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentMain.downloadButton.buttonState = ButtonState.Clicked
+            download()
+        } else {
+            requestWritePermission(requestLauncher)
+        }
     }
 
     private fun getStatus(): String {
@@ -152,6 +172,19 @@ class MainActivity : AppCompatActivity() {
             }
             val notificationManager = this.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(notificationChannel)
+        }
+    }
+
+    private fun requestWritePermission(requestLauncher: ActivityResultLauncher<String>) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_DENIED) {
+                requestLauncher.launch(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            }
         }
     }
 
