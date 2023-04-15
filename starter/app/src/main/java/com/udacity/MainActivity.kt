@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() {
                     context.getText(R.string.notification_description).toString(),
                     context
                 )
+                contentMain.downloadButton.buttonState = ButtonState.Completed
             }
         }
     }

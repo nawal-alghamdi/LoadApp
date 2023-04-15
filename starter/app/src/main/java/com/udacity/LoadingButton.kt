@@ -46,6 +46,10 @@ class LoadingButton @JvmOverloads constructor(
                 invalidate()
                 animateButton()
             }
+            ButtonState.Completed -> {
+                valueAnimator.repeatCount = 0
+                invalidate()
+            }
         }
     }
 
@@ -100,10 +104,11 @@ class LoadingButton @JvmOverloads constructor(
 
     private fun animateButton() {
         valueAnimator = ValueAnimator.ofFloat(0f, widthSize.toFloat())
-        valueAnimator.duration = 2500
+        valueAnimator.duration = 1500
+        valueAnimator.repeatCount = ValueAnimator.INFINITE
         valueAnimator.addUpdateListener {
             progressWidth = it.animatedValue as Float
-            sweepAngle = (it.animatedValue as Float / 3.61).toInt().toFloat()
+            sweepAngle = (it.animatedValue as Float / 2.5).toInt().toFloat()
             invalidate()
         }
         valueAnimator.start()
