@@ -8,6 +8,12 @@
         <OnSwipe app:touchAnchorId="@id/status_value_textView" />
     </Transition>
 
+    <Transition
+        app:constraintSetStart="@+id/start"
+        app:constraintSetEnd="@+id/end"
+        app:autoTransition="animateToEnd"
+        app:duration="1000"/>
+
     <ConstraintSet android:id="@+id/start">
         <Constraint
             android:id="@+id/ok_button"
